@@ -51,6 +51,15 @@ module API
       end
     end
 
+    def find_user(id)
+      user = User.find(id) || User.find_by(username: id)
+      if user && can?(current_user, :read_project, user)
+        user
+      else
+        nil
+      end
+    end
+
     def paginate(relation)
       per_page  = params[:per_page].to_i
       paginated = relation.page(params[:page]).per(per_page)

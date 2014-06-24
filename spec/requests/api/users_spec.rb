@@ -43,6 +43,12 @@ describe API::API, api: true  do
       json_response['username'].should == user.username
     end
 
+    it 'should return a user by username' do
+      get api("/users/#{user.username}", user)
+      response.status.should == 200
+      json_response['username'].should == user.username
+    end
+
     it "should return a 401 if unauthenticated" do
       get api("/users/9998")
       response.status.should == 401
@@ -186,6 +192,13 @@ describe API::API, api: true  do
       user.reload.bio.should == 'new test bio'
     end
 
+    it 'should update user with new bio by username' do
+      put api("/users/#{user.username}", admin), {bio: 'new test bio'}
+      response.status.should == 200
+      json_response['bio'].should == 'new test bio'
+      user.reload.bio.should == 'new test bio'
+    end
+
     it "should update admin status" do
       put api("/users/#{user.id}", admin), {admin: true}
       response.status.should == 200
@@ -249,6 +262,13 @@ describe API::API, api: true  do
       key_attrs = attributes_for :key
       expect {
         post api("/users/#{user.id}/keys", admin), key_attrs
+      }.to change{ user.keys.count }.by(1)
+    end
+
+    it 'should create ssh key by username' do
+      key_attrs = attributes_for :key
+      expect {
+        post api("/users/#{user.username}/keys", admin), key_attrs
       }.to change{ user.keys.count }.by(1)
     end
   end
@@ -319,6 +339,13 @@ describe API::API, api: true  do
 
     it "should delete user" do
       delete api("/users/#{user.id}", admin)
+      response.status.should == 200
+      expect { User.find(user.id) }.to raise_error ActiveRecord::RecordNotFound
+      json_response['email'].should == user.email
+    end
+
+    it 'should delete user by username' do
+      delete api("/users/#{user.username}", admin)
       response.status.should == 200
       expect { User.find(user.id) }.to raise_error ActiveRecord::RecordNotFound
       json_response['email'].should == user.email
