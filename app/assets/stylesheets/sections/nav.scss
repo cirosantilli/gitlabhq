@@ -5,6 +5,12 @@
   padding-top: 4px;
   border-bottom: 1px solid #E9E9E9;
 
+  @media (min-width: 1330px) {
+    .container {
+      width: 1300px;
+    }
+  }
+
   ul {
     padding: 0;
     margin: auto;
