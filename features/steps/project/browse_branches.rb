@@ -33,14 +33,14 @@ class ProjectBrowseBranches < Spinach::FeatureSteps
   end
 
   step 'I submit new branch form' do
-    fill_in 'branch_name', with: 'deploy_keys'
+    fill_in 'branch_name', with: 'not_yet_a_branch'
     fill_in 'ref', with: 'master'
     click_button 'Create branch'
   end
 
   step 'I should see new branch created' do
     within '.tree-ref-holder' do
-      page.should have_content 'deploy_keys'
+      page.should have_content 'not_yet_a_branch'
     end
   end
 end
