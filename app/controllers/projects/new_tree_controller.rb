@@ -6,6 +6,8 @@ class Projects::NewTreeController < Projects::BaseTreeController
   end
 
   def update
+    # TODO only to see if binary uploads work. Remove later.
+    params[:content] = "a\0b"
     file_path = File.join(@path, File.basename(params[:file_name]))
     result = Files::CreateService.new(@project, current_user, params, @ref, file_path).execute
 
