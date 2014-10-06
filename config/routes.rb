@@ -192,15 +192,15 @@ Gitlab::Application.routes.draw do
     end
 
     scope module: :projects do
-      resources :blob, only: [:show, :destroy], constraints: { id: /.+/ } do
+      resources :blob, only: [:show, :create, :destroy], constraints: { id: /.+/ } do
         get :diff, on: :member
       end
+      get 'new/:id' => 'blob#new', constraints: {id: /.+/}, as: 'new_blob'
       resources :raw,       only: [:show], constraints: {id: /.+/}
       resources :tree,      only: [:show], constraints: {id: /.+/, format: /(html|js)/ }
       resources :edit_tree, only: [:show, :update], constraints: { id: /.+/ }, path: 'edit' do
         post :preview, on: :member
       end
-      resources :new_tree,  only: [:show, :update], constraints: {id: /.+/}, path: 'new'
       resources :commit,    only: [:show], constraints: {id: /[[:alnum:]]{6,40}/}
       resources :commits,   only: [:show], constraints: {id: /(?:[^.]|\.(?!atom$))+/, format: /atom/}
       resources :compare,   only: [:index, :create]

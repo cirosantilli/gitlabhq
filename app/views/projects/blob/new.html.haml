@@ -1,7 +1,8 @@
 %h3.page-title New file
 %hr
 .file-editor
-  = form_tag(project_new_tree_path(@project, @id), method: :put, class: 'form-horizontal form-new-file') do
+  = form_tag(create_project_blob_path(@project, @id),
+             class: 'form-horizontal form-new-file') do
     .form-group.commit_message-group
       = label_tag 'file_name', class: 'control-label' do
         File name

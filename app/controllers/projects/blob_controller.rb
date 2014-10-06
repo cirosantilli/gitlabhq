@@ -6,11 +6,27 @@ class Projects::BlobController < Projects::ApplicationController
   before_filter :authorize_read_project!
   before_filter :authorize_code_access!
   before_filter :require_non_empty_project
-  before_filter :authorize_push!, only: [:destroy]
-
-  before_filter :blob
+  before_filter :authorize_push!, only: [:new, :create, :destroy]
+  before_filter :require_branch_head, only: [:new, :create]
+  before_filter :blob, except: [:new, :create]
 
   def show
+  end
+
+  def new
+  end
+
+  def create
+    file_path = File.join(@path, File.basename(params[:file_name]))
+    result = Files::CreateService.new(@project, current_user, params, @ref, file_path).execute
+
+    if result[:status] == :success
+      flash[:notice] = "Your changes have been successfully committed"
+      redirect_to project_blob_path(@project, File.join(@ref, file_path))
+    else
+      flash[:alert] = result[:message]
+      render :show
+    end
   end
 
   def destroy
