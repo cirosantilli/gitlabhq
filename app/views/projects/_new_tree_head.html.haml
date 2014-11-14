@@ -1,0 +1,5 @@
+%ul.nav.nav-tabs
+  = nav_link(controller: :new_tree) do
+    = link_to 'New', project_new_tree_path(@project, @id)
+  = nav_link(controller: :upload_tree) do
+    = link_to 'Upload', project_upload_tree_path(@project, @id)

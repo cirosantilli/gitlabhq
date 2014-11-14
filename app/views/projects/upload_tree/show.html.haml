@@ -1,0 +1,14 @@
+= render 'projects/new_tree_head'
+%h3.page-title Upload file
+%hr
+.file-editor
+  = form_tag(project_new_tree_path(@project, @id), method: :put, class: 'form-horizontal form-new-file') do
+    .form-group
+      = label_tag 'commit_message', class: 'control-label' do
+        Files
+      .col-sm-10
+        = file_field_tag :files, multiple: true
+    = render 'shared/commit_message_container', params: params,
+             placeholder: 'Upload file'
+    = render 'projects/commit_button', ref: @ref,
+              cancel_path: project_tree_path(@project, @id)
