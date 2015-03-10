@@ -5,3 +5,6 @@
 require File.expand_path('../config/application', __FILE__)
 
 Gitlab::Application.load_tasks
+
+qwer
+asdf
